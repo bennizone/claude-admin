@@ -7,7 +7,9 @@
 # Replace the __PLACEHOLDERS__ below. Templated by the Teil-B bootstrap.
 
 SESSION=__INSTANCE__            # tmux session + service name, e.g. "denker"
-WORKDIR=__WORKDIR__            # working directory, e.g. /home/cadmin
+WORKDIR=__WORKDIR__            # DEDICATED dir, e.g. /opt/claude — NEVER the home dir
+                              # (Claude prompts for folder-trust on $HOME every start
+                              #  -> would block the unattended systemd autostart)
 
 # Env passed INLINE into the tmux command (NOT exported before tmux — a running
 # tmux server does not inherit the launcher shell's env). SESSION_NAME lets

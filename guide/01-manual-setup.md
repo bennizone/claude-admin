@@ -6,6 +6,12 @@ selbst (Teil B). Dauert ~10 Minuten.
 > Platzhalter: ersetze `CLAUDEUSER` durch den gewünschten Login-Namen
 > (z. B. `cadmin`, `claude`, `hadmin` …). Halte ihn kurz und lowercase.
 
+> 💡 **Tipp — LXC anlegen:** Wenn du den Container noch nicht hast, sind die
+> community **Proxmox VE Helper-Scripts** (https://community-scripts.github.io/ProxmoxVE/)
+> der bequemste Weg — sauber vorkonfigurierte LXCs und **deutlich einfachere
+> Updates** später. Für Dienste wie Forgejo (siehe optional/forgejo.md) gibt es
+> dort fertige Installer-Scripts.
+
 ---
 
 ## Schritt 1 — User mit passwordless sudo anlegen
@@ -27,7 +33,19 @@ visudo -c                # Syntax prüfen — MUSS "parsed OK" sagen
 
 # systemd --user ohne aktiven Login erlauben (sonst stirbt die Instanz beim Logout)
 loginctl enable-linger "$USERNAME"
+
+# Dedizierter Arbeitsordner (NICHT das Home-Verzeichnis! siehe Kasten unten)
+WORKDIR=/opt/claude        # <-- frei wählbar, aber nicht /home/$USERNAME
+mkdir -p "$WORKDIR"
+chown "$USERNAME:$USERNAME" "$WORKDIR"
 ```
+
+> ⚠️ **Claude NIE im Home-Verzeichnis (`/home/$USERNAME`) laufen lassen.** Claude
+> Code stuft das Home als sensibel ein und fragt **bei jedem Start** nach
+> Verzeichnis-Trust — das blockiert den unbeaufsichtigten systemd-Autostart. Nutze
+> einen **dedizierten Ordner** (oben `/opt/claude`) als WORKDIR. Dort wird der
+> Trust einmal bestätigt und persistiert. (Der einmalige Auth-Login in Schritt 3
+> darf im Home passieren — nur die *persistente* Instanz braucht den eigenen Ordner.)
 
 **Warum `sudoers.d` statt `/etc/sudoers`:** isolierte Datei, ein kaputter Eintrag
 sperrt dich nicht aus dem ganzen sudo-System. `visudo -c` validiert *alle*

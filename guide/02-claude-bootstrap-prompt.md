@@ -2,12 +2,12 @@
 
 Ab hier richtet **Claude sich selbst** ein. Du gibst der frisch eingeloggten
 Session (Ende von Teil A) den Prompt unten. Voraussetzung: dieses Kit liegt auf
-dem LXC (per `git clone` deines GitHub-Repos oder kopiert).
+dem LXC — es IST dieses Repo, also einfach klonen:
 
 ```bash
-# falls noch nicht da — als der neue User:
-git clone <DEIN-GITHUB-REPO> ~/starter-kit-src
-# der Kit-Pfad ist dann z.B. ~/starter-kit-src/.../starter-kit
+# als der neue User:
+git clone https://github.com/bennizone/claude-admin.git ~/claude-admin
+# der Kit-Pfad ist dann: ~/claude-admin
 ```
 
 ---
@@ -18,12 +18,15 @@ git clone <DEIN-GITHUB-REPO> ~/starter-kit-src
 
 ```text
 Du sollst dich selbst als persistente Instanz einrichten. Das Starter-Kit liegt
-unter: ~/starter-kit-src   (passe den Pfad an, falls anders).
+unter: ~/claude-admin   (passe den Pfad an, falls anders).
 
 Frag mich zuerst kurz nach diesen 4 Dingen (mit sinnvollen Defaults):
   1. INSTANZ-NAME (kurz, lowercase, z.B. "denker") — wird tmux-Session + Service-Name.
   2. MODELL ("sonnet" / "opus" / Default leer = Account-Default).
-  3. ARBEITSORDNER (WORKDIR, Default: dieses Home-Verzeichnis).
+  3. ARBEITSORDNER (WORKDIR) — ein DEDIZIERTER Ordner, NICHT das Home-Verzeichnis!
+     Default: /opt/claude (in Teil A angelegt). Grund: im Home fragt Claude bei
+     JEDEM Start nach Verzeichnis-Trust -> blockiert den systemd-Autostart.
+     Stell sicher, dass der Ordner existiert und mir gehört; lege ihn sonst an.
   4. STEUERUNG: "ssh" (nur SSH+tmux) oder "remote" (claude.ai-Fernsteuerung).
      Bei Unsicherheit -> "ssh".
 

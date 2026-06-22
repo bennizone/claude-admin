@@ -49,11 +49,22 @@ Persistenz, die Selbst-Reset-Skripte und die `CLAUDE.md` eigenständig ein.
      [`optional/mem0/README.md`](optional/mem0/README.md) — inkl. unserer hart
      erkauften Tuning-/Bug-Lehren.
 
+## Empfehlenswerte Erweiterungen (optional)
+- **Forgejo — lokales Git als „Claudes baby"** → [`optional/forgejo.md`](optional/forgejo.md).
+  Eigener LAN-Git-Server, auf dem Claude selbstständig Repos anlegt und pusht.
+  ⚠️ **Nie ins Internet exposen** — nur LAN. Sehr empfehlenswert.
+- **mem0 — Langzeitgedächtnis** → [`optional/mem0/README.md`](optional/mem0/README.md).
+- **Web-Fernsteuerung** → [`optional/remote-control.md`](optional/remote-control.md).
+- **Proxmox VE Helper-Scripts** (https://community-scripts.github.io/ProxmoxVE/) für
+  LXCs (Claude-Host, Forgejo …) — sauberes Anlegen + **einfachere Updates**.
+
 ## Quickstart
 ```bash
-# 1. Auf dem LXC (als root): User + sudo + Node + Claude — siehe guide/01
+# 1. Auf dem LXC (als root): User + sudo + Node + Claude + dedizierter WORKDIR — guide/01
+#    (WICHTIG: Claude NICHT im Home laufen lassen — sonst Trust-Prompt bei jedem Start)
 # 2. Als neuer User einloggen, `claude` starten, Account-Login durchziehen
-# 3. Dieser frischen Session den Prompt aus guide/02 geben → sie bootstrapt sich
+# 3. Repo klonen + dieser frischen Session den Prompt aus guide/02 geben → sie bootstrapt sich
+#    git clone https://github.com/bennizone/claude-admin.git ~/claude-admin
 ```
 
 Reihenfolge strikt: **erst** Teil A (Mensch), **dann** Teil B (Claude). Teil C
