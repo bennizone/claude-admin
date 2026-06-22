@@ -1,0 +1,17 @@
+#!/bin/bash
+# Send /clear to own tmux session.
+# Works around the remote-control slash-cmd bug (CC 2.1.160+) and lets a session
+# reset its own context without an external SSH->tmux->type roundtrip.
+#
+# Session name resolution (first hit wins):
+#   1. $SESSION_NAME              (set this in your launch wrapper — recommended)
+#   2. basename of $CLAUDE_CONFIG_DIR minus ".claude-" (multi-instance/non-default config-dir)
+SESSION="${SESSION_NAME:-}"
+if [ -z "$SESSION" ] && [ -n "${CLAUDE_CONFIG_DIR:-}" ]; then
+  SESSION=$(basename "$CLAUDE_CONFIG_DIR" | sed 's/\.claude-//')
+fi
+if [ -z "$SESSION" ]; then
+  echo "ERROR: set \$SESSION_NAME (or \$CLAUDE_CONFIG_DIR)" >&2
+  exit 1
+fi
+tmux send-keys -t "$SESSION" "/clear" Enter

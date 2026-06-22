@@ -1,0 +1,11 @@
+#!/bin/bash
+# Send /compact to own tmux session (see selfclear for session-name resolution).
+SESSION="${SESSION_NAME:-}"
+if [ -z "$SESSION" ] && [ -n "${CLAUDE_CONFIG_DIR:-}" ]; then
+  SESSION=$(basename "$CLAUDE_CONFIG_DIR" | sed 's/\.claude-//')
+fi
+if [ -z "$SESSION" ]; then
+  echo "ERROR: set \$SESSION_NAME (or \$CLAUDE_CONFIG_DIR)" >&2
+  exit 1
+fi
+tmux send-keys -t "$SESSION" "/compact" Enter

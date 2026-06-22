@@ -1,0 +1,32 @@
+#!/bin/bash
+# Detached handoff reset — the core of the Handoff protocol.
+#
+# Launched DETACHED (setsid) from WITHIN a claude session so it survives /clear.
+# It clears the instance's own tmux session, waits, then injects a short re-entry
+# prompt pointing at a handoff file. The handoff file (on disk) is the bridge
+# across the clear; the fresh session reads it and continues the work thread.
+#
+# Usage (from within the session, detached):
+#   setsid handoff-reset <tmux-session> <handoff-file> [pre] [post] [settle] </dev/null &>/dev/null &
+set -u
+SESSION="${1:?tmux session name required}"
+HANDOFF="${2:?handoff file path required}"
+PRE="${3:-6}"      # wait before clearing (let the session settle)
+POST="${4:-6}"     # wait after clear before injecting re-entry prompt
+SETTLE="${5:-2}"   # gap between typing text and pressing Enter (paste-detection guard)
+
+[ -f "$HANDOFF" ] || { echo "handoff-reset: handoff file '$HANDOFF' missing" >&2; exit 1; }
+tmux has-session -t "$SESSION" 2>/dev/null || { echo "handoff-reset: no tmux session '$SESSION'" >&2; exit 1; }
+
+# Type text, let the TUI settle (so Claude Code's paste-detection doesn't swallow
+# the trailing Enter as a NEWLINE), THEN submit with a SEPARATE Enter keystroke.
+submit() {
+  tmux send-keys -t "$SESSION" -- "$1"
+  sleep "$SETTLE"
+  tmux send-keys -t "$SESSION" Enter
+}
+
+sleep "$PRE"
+submit "/clear"
+sleep "$POST"
+submit "Lies $HANDOFF und fahre dort fort."

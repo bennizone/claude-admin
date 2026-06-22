@@ -1,0 +1,13 @@
+[Unit]
+Description=Claude Code — persistent instance __INSTANCE__
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/bin/claude-__INSTANCE__.sh
+ExecStop=/usr/bin/tmux kill-session -t __INSTANCE__
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

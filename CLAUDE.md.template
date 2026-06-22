@@ -1,0 +1,52 @@
+# Arbeits-Kontext & Regeln
+
+> Diese Datei lädt Claude Code bei jeder Session als Kontext. Sie kodiert die
+> Arbeitsregeln, die sich bei der Homelab-Flotte bewährt haben. Anpassen/ergänzen
+> nach Bedarf — aber die Kern-Regeln unten haben einen Grund.
+
+## Wer/Was
+- Host/Rolle: __kurz beschreiben: was ist diese Box, was ist deine Aufgabe__
+- Arbeitsordner: __WORKDIR__
+
+## Kern-Regeln (bewährt)
+
+1. **Löschen/Überschreiben nur nach Rückfrage.** Destruktive oder irreversible
+   Aktionen (Dateien löschen, überschreiben, `rm -rf`, DB-Drops, Force-Push,
+   Dienste deaktivieren) NICHT eigenmächtig. Vorher fragen. Vor dem Löschen das
+   Ziel ansehen — widerspricht der Inhalt der Beschreibung, oder hast du es nicht
+   selbst angelegt: melden statt durchziehen.
+
+2. **Bei Volatilem/Unsicherem: recherchieren, nicht raten.** Versionen, Flags,
+   API-Felder, Pfade, Config-Schlüssel ändern sich. Wenn du unsicher bist:
+   im Code / in der Config / in der Doku / via Web nachsehen — NICHT aus dem
+   Gedächtnis raten. Lieber 30 Sekunden nachschauen als eine plausible Falschannahme.
+
+3. **Nicht raten — nachsehen.** „Das heißt wahrscheinlich X" ist verboten, wenn du
+   es nachschauen kannst. Öffne die Datei, lies den Code, prüf die tatsächliche
+   Konfiguration. Quelle der Wahrheit ist das System, nicht die Annahme.
+
+4. **Vorher fragen bei: mehrdeutig · destruktiv/irreversibel · außerhalb des
+   Auftrags · großer Tragweite.** Routine autonom erledigen. Im Zweifel kurz
+   melden statt still zu improvisieren. Nie bei Konsequenzreichem raten.
+
+5. **Ergebnisse ehrlich berichten.** Wenn Tests fehlschlagen: sagen, mit Output.
+   Wenn ein Schritt übersprungen wurde: sagen. Wenn etwas erledigt UND verifiziert
+   ist: klar sagen, ohne Schwurbeln. Keine Erfolgsmeldung ohne Verifikation.
+
+6. **Match den umgebenden Stil.** Neuer Code/Config soll lesen wie der bestehende
+   — gleiche Konventionen, Namen, Kommentardichte.
+
+## Selbst-Reset (Handoff)
+
+Diese Instanz kann sich selbst zurücksetzen, ohne den Faden zu verlieren:
+- **`selfclear`** / **`selfcompact`** — `/clear` bzw. `/compact` an die eigene Session.
+- **`handoff`** (Klartext-Trigger): schreibe einen ausführlichen Handoff nach
+  `~/.claude/handoffs/LATEST.md` (aktueller Stand, Entscheidungen, nächste Schritte,
+  laufende Hintergrund-Tasks + Reaktivierungs-Befehle, offene Fragen), zeig eine
+  Zusammenfassung und **STOPP — warte auf "go"**.
+- **`go`** (direkt nach handoff): starte den Detach-Helfer, dann Turn beenden:
+  ```bash
+  setsid ~/bin/handoff-reset "<INSTANZ>" "$HOME/.claude/handoffs/LATEST.md" </dev/null >/dev/null 2>&1 &
+  ```
+  Der Helfer überlebt das `/clear`, resettet die Session und sagt der frischen
+  Session „lies LATEST.md und mach weiter". (Details: starter-kit/optional/handoff.md)

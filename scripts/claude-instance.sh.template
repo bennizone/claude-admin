@@ -1,0 +1,38 @@
+#!/bin/bash
+# Launch wrapper for a persistent Claude Code instance (supervised by systemd).
+# Starts claude inside a detached tmux session; the `while has-session` loop keeps
+# the systemd service "running" as long as the tmux session lives, so Restart=always
+# brings it back if claude exits.
+#
+# Replace the __PLACEHOLDERS__ below. Templated by the Teil-B bootstrap.
+
+SESSION=__INSTANCE__            # tmux session + service name, e.g. "denker"
+WORKDIR=__WORKDIR__            # working directory, e.g. /home/cadmin
+
+# Env passed INLINE into the tmux command (NOT exported before tmux — a running
+# tmux server does not inherit the launcher shell's env). SESSION_NAME lets
+# selfclear/selfcompact find this session.
+ENVV="SESSION_NAME=$SESSION"
+# Multi-instance / non-default config dir? add e.g.:
+#   ENVV="$ENVV CLAUDE_CONFIG_DIR=/home/cadmin/.claude-$SESSION"
+
+# --- control mode -----------------------------------------------------------
+# SSH+tmux only (default): leave RC empty.
+RC=""
+# Web remote-control (claude.ai): uncomment. The session-name-prefix is REQUIRED
+# if you run >1 RC instance under the SAME linux user (see optional/remote-control.md).
+# RC="--remote-control $SESSION --remote-control-session-name-prefix $SESSION"
+
+# Model: leave empty to use the account default. Do NOT use [1m] brackets here;
+# set the model in settings.json if you need a specific one (--continue pins the
+# first-start model anyway).
+MODEL_FLAG=""                 # e.g. "--model sonnet"  (optional)
+
+FLAGS="$RC --permission-mode bypassPermissions $MODEL_FLAG"
+
+tmux kill-session -t "$SESSION" 2>/dev/null
+tmux new-session -d -s "$SESSION" -c "$WORKDIR" \
+  "$ENVV claude $FLAGS --continue || $ENVV claude $FLAGS; tmux kill-session -t $SESSION; exec bash"
+
+# keep the service alive while the tmux session exists
+while tmux has-session -t "$SESSION" 2>/dev/null; do sleep 5; done
