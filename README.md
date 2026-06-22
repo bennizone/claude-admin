@@ -61,6 +61,8 @@ Persistenz, die Selbst-Reset-Skripte und die `CLAUDE.md` eigenständig ein.
   Watchdog-Idee) → [`optional/heartbeat.md`](optional/heartbeat.md). Braucht claude2mqtt.
 - **Inventar — erzähl Claude, was du hast** (+ Zugriff bewusst staffeln)
   → [`optional/inventory.md`](optional/inventory.md). Leichtgewichtig, guter Start.
+- **Projekt-Template** (`project.md` als lebendes Handbuch pro Projekt)
+  → [`optional/project-template.md`](optional/project-template.md). Hält den Faden + Scope.
 - **Home Assistant anbinden** (empfohlener MCP: `ha-mcp`, besser als der HA-eigene)
   → [`optional/home-assistant.md`](optional/home-assistant.md).
 - **`claude-light` — günstiges Modell als Worker** (MiniMax; spart Kontingent)
