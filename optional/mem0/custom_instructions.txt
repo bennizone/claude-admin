@@ -1,0 +1,28 @@
+Dieses Gedächtnis ist das LANGZEITGEDÄCHTNIS eines Claude-Code-Assistenten: Es bewahrt Wissen über einzelne Sessions hinweg (auch nach einem Reset/„/clear"), damit eine künftige Session den Faden wieder aufnehmen kann. Es dient sowohl der technischen Projektarbeit (Infrastruktur, Architektur, Zugänge, Code) als auch dem persönlichen Alltag des Nutzers. Bewahre Wissen, das eine spätere Session brauchen wird.
+
+Speichere Memories in der Originalsprache des Nutzers; übersetze niemals. Übernimm Eigennamen, Hostnamen, IDs, Pfade, Befehle, Ports und technische Bezeichnungen wortgetreu und exakt.
+
+Frage dich bei jedem Kandidaten: Ist das merkenswert? Ist es in ~5 Tagen noch relevant? Ist es dauerhaft oder nur flüchtig? Behalte nur, was dauerhaft UND relevant ist.
+
+Speichere bevorzugt DAUERHAFT relevante Fakten: Entscheidungen samt Begründung; Architektur und Konventionen; Constraints, Regeln und Auflagen; Zugänge, Endpunkte, IDs, Ports und Pfade; Projektstand und nächste Schritte; Präferenzen, Personen und Pläne des Nutzers; dauerhafte Konfiguration.
+
+Speichere NICHT transiente Betriebs-/Infra-Vorgänge ohne Dauerwert, z. B.: Service neugestartet; Container läuft/healthy; Test oder Build bestanden; etwas deployed oder committet; Zwischenschritte; einmalige Kommando-Ausgaben; Status- oder Health-Pings; Step-/ETA-/Fortschritts-Angaben; Watcher-/Job-IDs; „läuft gerade auf Box X". Speichere ebensowenig persönlichen Smalltalk oder Momentaufnahmen (Tagesform, Stimmung, Wetter, „heute müde"). Ausnahme: Der Vorgang markiert einen Meilenstein oder eine dauerhafte Zustandsänderung (z. B. neue Komponente dauerhaft in Betrieb genommen, etwas dauerhaft deaktiviert) — dann behalte genau diese Tatsache.
+
+Bei gemischten Aussagen: Behalte nur den dauerhaften Teil und lasse den flüchtigen weg; klebe keine flüchtigen Details (Step, ETA, „gerade auf Box X") an einen dauerhaften Fakt.
+
+Beispiele:
+
+Input: Wir bleiben als Datenbank bei PostgreSQL; MySQL wurde wegen der schlechteren JSON-Unterstützung verworfen.
+Output: {"facts": ["Entscheidung: Datenbank bleibt PostgreSQL; MySQL wegen schlechterer JSON-Unterstützung verworfen"]}
+
+Input: Container neugestartet, ist wieder healthy. Backup-Job laeuft gerade auf nas1, 40% fertig, ETA 14:00.
+Output: {"facts": []}
+
+Input: Der nächtliche Backup-Lauf läuft gerade. Grundsatz: Backups immer 3-2-1, eine Kopie offsite.
+Output: {"facts": ["Grundsatz: Backups immer nach 3-2-1, eine Kopie offsite"]}
+
+Input: Der Reverse-Proxy laeuft auf 192.168.1.10, Port 443, Caddy. Zugang per SSH als admin mit Key ~/.ssh/id_ed25519.
+Output: {"facts": ["Reverse-Proxy: Caddy auf 192.168.1.10:443", "Zugang Reverse-Proxy: SSH als admin mit Key ~/.ssh/id_ed25519"]}
+
+Input: Bin heute echt muede und das Wetter ist mies.
+Output: {"facts": []}

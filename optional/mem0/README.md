@@ -11,6 +11,19 @@ sonst selbst durchleiden müsstest. Die Server-Installation (Self-hosted mem0 +
 Vektor-DB + Embedder) folgt der offiziellen mem0-Doku; hier steht, was DARÜBER
 HINAUS wichtig ist.
 
+## ⚠️ Voraussetzung: ordentliche Inferenz-Hardware
+mem0 macht bei jedem Recall **Embeddings** und bei jedem Schreiben eine
+**LLM-Extraktion**. Beides will laufen, ohne deine Arbeit auszubremsen:
+- **Embedding** → am besten ein **eigener GPU-Server** (z. B. Ollama mit einem
+  guten mehrsprachigen Embedder wie bge-m3). Lokal, schnell, kostenlos pro Aufruf.
+- **Extraktions-LLM** → ein **gutes** Modell (z. B. MiniMax). **Hier NICHT sparen.**
+  Die Qualität des Extraktors entscheidet direkt, ob brauchbare Fakten oder Müll im
+  Gedächtnis landen — ein schwaches/billiges Modell merkt sich das Falsche und wirft
+  Wichtiges weg. Datenqualität > Sparen.
+
+Ohne dedizierte GPU/ein gutes LLM lohnt sich mem0 kaum — dann lieber bei
+`CLAUDE.md` + `handoff` bleiben.
+
 ## Architektur, die sich bewährt hat
 - **Ein Server, mehrere Clients.** Ein self-hosted mem0-Server (HTTP-API), pro
   Claude-Instanz ein „Client". Trennung der Gedächtnis-Pools über `user_id`
@@ -39,7 +52,13 @@ Server-Key **`custom_instructions`** (NICHT `custom_fact_extraction_prompt` — 
 auf unserem Server wirkungslos). Inhalt: Zweck-Erklärung + **Relevanz-Selbstbefragung**
 („merkenswert? in 5 Tagen noch relevant? dauerhaft vs. flüchtig?") + Few-Shot-Beispiele
 inkl. Negativbeispiel `{"facts":[]}`. Das war der **größte Hebel** gegen Rauschen.
-(Beispiel-Prompt: siehe unsere `custom_instructions.txt` im Fleet-Repo.)
+
+> 📄 **Unser fertiger Prompt liegt direkt daneben: [`custom_instructions.txt`](custom_instructions.txt).**
+> Sein Kern: **flüchtige/transiente Dinge werden gar nicht erst extrahiert** (Service
+> neugestartet, Build grün, „läuft gerade auf Box X", ETA, Tagesform/Wetter …). Genau
+> das verhindert das Hauptärgernis: dass eine temporäre Statusmeldung von heute in zwei
+> Wochen noch permanent in jeden Kontext injiziert wird. Nimm ihn als Startpunkt und
+> passe die Beispiele an deine Domäne an.
 
 ### 2. ⚠️ NIEMALS die volle Config zurück-POSTen (Daten-Verlust-Falle)
 Beim Setzen der `custom_instructions`: **nur** `{"custom_instructions": "..."}` POSTen

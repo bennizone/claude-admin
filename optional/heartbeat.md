@@ -110,3 +110,15 @@ wacht auf und handelt.
 
 Wenn dich das reizt: das ist genau das „historisch Gewachsene" — frag Benni/sonnet,
 dann adaptieren wir die Vollversion auf dein Setup.
+
+## 💡 Idee: Watchdogs (lohnt sich!)
+Sobald Heartbeat (+ Bus) steht, sind **Watchdogs** der vielleicht nützlichste
+Anwendungsfall: regelmäßige Selbst-Checks deiner Infrastruktur, die dich nur bei
+Problemen wecken — z. B. „Platte ≥ 90 % voll", „Dienst X nicht erreichbar", „RAM/Swap
+am Limit", „Backup heute Nacht nicht gelaufen". Statt eines stummen cron-Eintrags
+weckt der Watchdog die **Claude-Session**, die das Problem dann gleich einordnen (und
+oft beheben) kann.
+
+> Ehrlicherweise ist das auch bei *uns* noch eine Baustelle mit Lücken — gutes
+> gemeinsames nächstes Thema. Es hängt an Heartbeat → das hängt an claude2mqtt.
+> Fang mit ein, zwei einfachen Checks an (Platte, ein kritischer Dienst) und bau aus.

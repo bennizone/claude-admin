@@ -57,8 +57,14 @@ Persistenz, die Selbst-Reset-Skripte und die `CLAUDE.md` eigenständig ein.
 - **Web-Fernsteuerung** → [`optional/remote-control.md`](optional/remote-control.md).
 - **claude2mqtt — Nachrichten-Bus** (Instanzen reden miteinander; Basis für Heartbeat)
   → [`optional/claude2mqtt.md`](optional/claude2mqtt.md). ⚠️ LAN-only.
-- **Heartbeat — zeitgesteuertes Wecken** (Cron-Ersatz, der die Session weckt)
-  → [`optional/heartbeat.md`](optional/heartbeat.md). Braucht claude2mqtt.
+- **Heartbeat — zeitgesteuertes Wecken** (Cron-Ersatz, der die Session weckt; inkl.
+  Watchdog-Idee) → [`optional/heartbeat.md`](optional/heartbeat.md). Braucht claude2mqtt.
+- **Inventar — erzähl Claude, was du hast** (+ Zugriff bewusst staffeln)
+  → [`optional/inventory.md`](optional/inventory.md). Leichtgewichtig, guter Start.
+- **Home Assistant anbinden** (empfohlener MCP: `ha-mcp`, besser als der HA-eigene)
+  → [`optional/home-assistant.md`](optional/home-assistant.md).
+- **`claude-light` — günstiges Modell als Worker** (MiniMax; spart Kontingent)
+  → [`optional/claude-light.md`](optional/claude-light.md). Braucht MiniMax-Plan.
 - **Proxmox VE Helper-Scripts** (https://community-scripts.github.io/ProxmoxVE/) für
   LXCs (Claude-Host, Forgejo …) — sauberes Anlegen + **einfachere Updates**.
 
