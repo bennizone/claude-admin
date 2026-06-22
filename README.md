@@ -55,6 +55,10 @@ Persistenz, die Selbst-Reset-Skripte und die `CLAUDE.md` eigenständig ein.
   ⚠️ **Nie ins Internet exposen** — nur LAN. Sehr empfehlenswert.
 - **mem0 — Langzeitgedächtnis** → [`optional/mem0/README.md`](optional/mem0/README.md).
 - **Web-Fernsteuerung** → [`optional/remote-control.md`](optional/remote-control.md).
+- **claude2mqtt — Nachrichten-Bus** (Instanzen reden miteinander; Basis für Heartbeat)
+  → [`optional/claude2mqtt.md`](optional/claude2mqtt.md). ⚠️ LAN-only.
+- **Heartbeat — zeitgesteuertes Wecken** (Cron-Ersatz, der die Session weckt)
+  → [`optional/heartbeat.md`](optional/heartbeat.md). Braucht claude2mqtt.
 - **Proxmox VE Helper-Scripts** (https://community-scripts.github.io/ProxmoxVE/) für
   LXCs (Claude-Host, Forgejo …) — sauberes Anlegen + **einfachere Updates**.
 
